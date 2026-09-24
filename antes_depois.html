@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+    
+    body { 
+      display: flex; 
+      justify-content: center; 
+      align-items: center; 
+      background: transparent; 
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+    
+    .container {
+      position: relative;
+      width: 100%;
+      max-width:1200px; /* Largura máxima ideal para foto retrato */
+      height: 120vh; /* Ocupa a maior parte da altura sem quebrar */
+      max-height: 750px;
+      overflow: hidden;
+      border-radius: 12px;
+      user-select: none;
+      margin: 0 auto;
+    }
+
+    /* Foto de fundo (Com tratamento / DEPOIS) */
+    .img-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Wrapper do corte da foto da frente */
+    .img-fg-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    /* Foto da frente (Sem tratamento / ANTES) */
+    .img-fg-wrapper img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      max-width: none;
+    }
+
+    /* Linha divisória da cortina */
+    .slider-bar {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 3px;
+      height: 100%;
+      background: #ffffff;
+      cursor: ew-resize;
+      transform: translateX(-50%);
+      z-index: 10;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    /* Botão central com o ícone */
+    .slider-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      background: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      color: #333333;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    /* Controle invisível para arrastar no celular/mouse */
+    .slider-input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: ew-resize;
+      z-index: 20;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="container">
+    <!-- Foto de Fundo (Tratada / Depois) -->
+    <img class="img-bg" src="https://cdn.myportfolio.com/bbd2517a-0fdb-4699-b03a-e3a4e1cc4c46/855be333-30e7-4e70-8d56-c28d508935d5_rw_1920.jpg?h=25dbda0d08a1851ba261f36ba9f39123" alt="Foto Tratada">
+    
+    <!-- Foto da Frente (Original / Antes) -->
+    <div class="img-fg-wrapper" id="wrapper">
+      <img id="fg-img" src="https://cdn.myportfolio.com/bbd2517a-0fdb-4699-b03a-e3a4e1cc4c46/a4776fd2-18fa-414e-a3b4-9135242669d6_rw_1920.jpg?h=f669459753faa3275811925c975f87c4" alt="Foto Original">
+    </div>
+
+    <!-- Divisória e Botão -->
+    <div class="slider-bar" id="bar">
+      <div class="slider-button">↔</div>
+    </div>
+
+    <!-- Input de controle de arraste -->
+    <input type="range" min="0" max="100" value="50" class="slider-input" id="slider">
+  </div>
+
+  <script>
+    const slider = document.getElementById("slider");
+    const wrapper = document.getElementById("wrapper");
+    const bar = document.getElementById("bar");
+    const container = document.getElementById("container");
+    const fgImg = document.getElementById("fg-img");
+
+    function updateWidths() {
+      // Ajusta a imagem interna para bater exatamente com a largura total do container
+      fgImg.style.width = container.offsetWidth + "px";
+    }
+
+    window.addEventListener("resize", updateWidths);
+    updateWidths();
+
+    slider.addEventListener("input", (e) => {
+      const val = e.target.value + "%";
+      wrapper.style.width = val;
+      bar.style.left = val;
+    });
+  </script>
+
+</body>
+</html>
